@@ -13,23 +13,14 @@ with a start form at [models/seed-export-shipment-ready.form](models/seed-export
 
 ## What this demonstrates
 
-An AI Agent (ad-hoc sub-process + AI Agent connector) is given four tools, one
-per bullet in the source copy above, each hitting a **real, live, public,
-keyless** service — no mocks, no stubs, no local fixtures pretending to be
-external systems:
+An AI Agentis given four tools, each hitting a **real, live, public, keyless** service. This showcases how those tools are governed by Camunda.
 
-| # | Bullet it demonstrates | Protocol | Public service | BPMN element |
+| # | What it does | Protocol | Public service used | Tool / BPMN element |
 |---|---|---|---|---|
 | 1 | Queries databases | SQL | UCSC public MySQL server (`hg38`) | `VerifyGeneticMarker` |
 | 2 | Calls APIs | GraphQL | [Countries GraphQL API](https://countries.trevorblades.com/) | `CheckDestinationCountry` |
 | 3 | Updates records | REST | [api.mathjs.org](https://api.mathjs.org) expression evaluator | `ComputeComplianceScore` |
 | 4 | Sends communications | REST | [httpbin.io](https://httpbin.io) echo endpoint | `NotifyExportTeam` |
-
-Tools 3 and 4 both use REST rather than four distinct protocols — the SOAP
-connector is Self-Managed/Hybrid only and never available on SaaS, which
-would conflict with the SaaS-first, zero-config-LLM design below. See
-"Design notes" at the bottom for more on why the tools are wired the way
-they are.
 
 ## Demo scenario
 
