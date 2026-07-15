@@ -6,6 +6,8 @@ from [camunda.com/orchestrate/agents](https://camunda.com/orchestrate/agents/):
 > Acts on systems. Queries databases, calls APIs, updates records, sends
 > communications. The LLM reasons about which tool to invoke and when.
 
+![Process Model](models/seed-export-compliance-agent.png)
+
 The process model lives at [models/seed-export-compliance-agent.bpmn](models/seed-export-compliance-agent.bpmn),
 with a start form at [models/seed-export-shipment-ready.form](models/seed-export-shipment-ready.form).
 
