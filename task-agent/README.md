@@ -60,6 +60,8 @@ only.
 
 ### Option A — Camunda 8 SaaS (recommended)
 
+[![Install In Camunda SaaS](https://img.shields.io/badge/Install%20In-Camunda%20Modeler-0A7A5C?style=for-the-badge)](https://modeler.cloud.camunda.io/import/resources?source=https://raw.githubusercontent.com/berndruecker/camunda-examples-quick-turnaround/main/task-agent/models/seed-export-compliance-agent.bpmn,https://raw.githubusercontent.com/berndruecker/camunda-examples-quick-turnaround/main/task-agent/models/seed-export-shipment-ready.form&title=Seed%20Export%20Compliance%20Agent)
+
 This example is pre-configured to use the **Camunda-provided LLM** — a fully managed model that works out of the box. The required secrets (`CAMUNDA_PROVIDED_LLM_API_ENDPOINT` and
 `CAMUNDA_PROVIDED_LLM_API_KEY`) are automatically available on Camunda SaaS — no external API keys, no third-party accounts, no configuration required.
 

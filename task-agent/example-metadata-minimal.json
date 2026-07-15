@@ -3,7 +3,8 @@
   "summary": "A Task-agent example: an AI Agent queries a database, calls a GraphQL API, updates a record via SOAP, and sends a REST notification.",
   "url": "https://github.com/berndruecker/camunda-examples-quick-turnaround/task-agent",
   "resources": [
-    "models/seed-export-compliance-agent.bpmn"
+    "models/seed-export-compliance-agent.bpmn",
+    "models/seed-export-shipment-ready.form"
   ],
   "sampleVariables": {
     "shipmentId": "SHIP-2026-0731",
