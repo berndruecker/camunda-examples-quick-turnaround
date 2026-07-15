@@ -1,0 +1,42 @@
+{
+  "components": [
+    {
+      "label": "Shipment ID",
+      "type": "textfield",
+      "layout": {
+        "row": "Row_shipment_id",
+        "columns": null
+      },
+      "id": "Field_ShipmentId",
+      "key": "shipmentId",
+      "defaultValue": "SHIP-2026-0731",
+      "validate": {
+        "required": true
+      }
+    },
+    {
+      "label": "Shipment notes",
+      "description": "Paperwork, an email, or notes about the shipment, in plain free text. The agent reads this to work out the gene marker and destination country itself.",
+      "type": "textarea",
+      "layout": {
+        "row": "Row_shipment_notes",
+        "columns": null
+      },
+      "id": "Field_ShipmentNotes",
+      "key": "shipmentNotes",
+      "defaultValue": "Shipment SHIP-2026-0731: seed stock ready for export to Brazil. Lab reference marker on the paperwork is TP53.",
+      "validate": {
+        "required": true
+      }
+    }
+  ],
+  "type": "default",
+  "id": "seed-export-shipment-ready",
+  "executionPlatform": "Camunda Cloud",
+  "executionPlatformVersion": "8.10.0",
+  "exporter": {
+    "name": "Camunda Modeler",
+    "version": "5.46.1"
+  },
+  "schemaVersion": 18
+}

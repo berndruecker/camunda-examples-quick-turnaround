@@ -1,0 +1,13 @@
+{
+  "name": "Seed Export Compliance Agent",
+  "summary": "A Task-agent example: an AI Agent queries a database, calls a GraphQL API, updates a record via SOAP, and sends a REST notification.",
+  "url": "https://github.com/berndruecker/camunda-examples-quick-turnaround/task-agent",
+  "resources": [
+    "models/seed-export-compliance-agent.bpmn"
+  ],
+  "sampleVariables": {
+    "shipmentId": "SHIP-2026-0731",
+    "geneMarker": "TP53",
+    "destinationCountryCode": "BR"
+  }
+}

@@ -1,0 +1,97 @@
+{
+  "$schema": "https://unofficial.camunda.com/schemas/example-manifest/v1/example-manifest.schema.json",
+  "manifestVersion": "1.0",
+  "id": "seed-export-compliance-agent",
+  "name": "Seed Export Compliance Agent",
+  "summary": "A Task-agent example: an AI Agent queries a database, calls a GraphQL API, updates a record via SOAP, and sends a REST notification.",
+  "description": "A small, self-contained Camunda 8 example illustrating the Task agent pattern (https://camunda.com/orchestrate/agents/). An AI Agent is given four tools - one per 'queries databases / calls APIs / updates records / sends communications' bullet - each hitting a real, live, public, keyless service. No mocks, no signups beyond the LLM key (and none at all on Camunda SaaS, which uses the zero-config Camunda-provided LLM).",
+  "category": "ai-agents",
+  "tags": ["ai-agent", "task-agent", "connectors", "sql", "graphql", "soap", "rest", "ad-hoc-sub-process"],
+  "author": {
+    "name": "Bernd Ruecker",
+    "url": "https://github.com/berndruecker"
+  },
+  "license": "Apache-2.0",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/berndruecker/camunda-examples-quick-turnaround",
+    "ref": "main",
+    "path": "task-agent"
+  },
+  "assets": {
+    "readme": {
+      "file": "README.md",
+      "url": "https://raw.githubusercontent.com/berndruecker/camunda-examples-quick-turnaround/main/task-agent/README.md"
+    },
+    "processes": [
+      {
+        "id": "seed-export-compliance-agent",
+        "name": "Seed Export Compliance Agent",
+        "file": "models/seed-export-compliance-agent.bpmn",
+        "url": "https://raw.githubusercontent.com/berndruecker/camunda-examples-quick-turnaround/main/task-agent/models/seed-export-compliance-agent.bpmn",
+        "primary": true
+      }
+    ]
+  },
+
+  "requirements": {
+    "camunda": {
+      "executionPlatformVersion": ">=8.9"
+    },
+    "connectors": [
+      { "type": "io.camunda.agenticai:aiagent-job-worker:1", "builtIn": true, "usedBy": ["ComplianceCheckAgent"] },
+      { "type": "io.camunda:connector-jdbc:1", "builtIn": true, "usedBy": ["VerifyGeneticMarker"] },
+      { "type": "io.camunda:connector-graphql:1", "builtIn": true, "usedBy": ["CheckDestinationCountry"] },
+      { "type": "io.camunda:soap:1", "builtIn": true, "usedBy": ["ComputeComplianceScore"], "notes": "Self-Managed / Hybrid only - not available on SaaS" },
+      { "type": "io.camunda:http-json:1", "builtIn": true, "usedBy": ["NotifyExportTeam"] }
+    ],
+    "secrets": {
+      "saas": {
+        "required": [],
+        "notes": "CAMUNDA_PROVIDED_LLM_API_ENDPOINT and CAMUNDA_PROVIDED_LLM_API_KEY are pre-populated automatically on Camunda SaaS trial / AI-features-enabled clusters. No manual configuration needed."
+      },
+      "selfManaged": {
+        "required": [
+          {
+            "name": "ANTHROPIC_API_KEY",
+            "description": "LLM provider API key for the AI Agent connector. Swap provider.* inputs on the ComplianceCheckAgent element to match whichever provider this key belongs to.",
+            "example": "sk-ant-..."
+          }
+        ],
+        "notes": "Camunda-provided LLM is SaaS-only. On Camunda 8 Run / Self-Managed, an external LLM provider key is the one unavoidable setup step."
+      }
+    },
+    "externalServices": [
+      { "name": "UCSC public MySQL (hg38)", "host": "genome-mysql.soe.ucsc.edu:3306", "protocol": "mysql", "auth": "none", "etiquette": "single indexed LIMIT 1 lookup per run - do not loop or load-test" },
+      { "name": "Countries GraphQL API", "url": "https://countries.trevorblades.com/", "protocol": "graphql", "auth": "none" },
+      { "name": "dneonline SOAP Calculator", "url": "http://www.dneonline.com/calculator.asmx", "protocol": "soap", "auth": "none" },
+      { "name": "httpbin echo", "url": "https://httpbin.org/post", "protocol": "rest", "auth": "none", "notes": "swap for a fresh https://webhook.site/<uuid> URL to watch the notification land live" }
+    ]
+  },
+
+  "deployment": {
+    "resources": ["models/seed-export-compliance-agent.bpmn"]
+  },
+
+  "run": {
+    "processId": "seed-export-compliance-agent",
+    "startEvent": {
+      "id": "StartEvent_ShipmentReady",
+      "type": "none",
+      "hasForm": false
+    },
+    "sampleVariables": {
+      "shipmentId": "SHIP-2026-0731",
+      "geneMarker": "TP53",
+      "destinationCountryCode": "BR"
+    },
+    "expectedOutcome": "The agent calls verify_genetic_marker, check_destination_country, compute_compliance_score, and notify_export_team in order, then the process completes at 'Compliance decision sent' with a cleared/flagged-for-review decision visible in Operate."
+  },
+
+  "links": {
+    "learnMore": "https://camunda.com/orchestrate/agents/",
+    "camundaProvidedLlmDocs": "https://docs.camunda.io/docs/components/agentic-orchestration/camunda-provided-llm/",
+    "soapConnectorDocs": "https://docs.camunda.io/docs/components/connectors/protocol/soap/",
+    "c8run": "https://docs.camunda.io/docs/self-managed/quickstart/developer-quickstart/c8run/"
+  }
+}
