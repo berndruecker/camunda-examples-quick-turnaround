@@ -8,7 +8,6 @@
   ],
   "sampleVariables": {
     "shipmentId": "SHIP-2026-0731",
-    "geneMarker": "TP53",
-    "destinationCountryCode": "BR"
+    "shipmentNotes": "Shipment SHIP-2026-0731: seed stock ready for export to Brazil. Lab reference marker on the paperwork is TP53."
   }
 }
