@@ -8,7 +8,6 @@
     "models/seed-export-compliance-review.form"
   ],
   "sampleVariables": {
-    "shipmentId": "SHIP-2026-0731",
-    "shipmentNotes": "Shipment SHIP-2026-0731: seed stock ready for export to Brazil. Lab reference marker on the paperwork is TP53."
+    "shipmentNotes": "SHIP-2026-0731 is prepared for transfer to Brazil. Supporting paperwork includes reference code TP53"
   }
 }

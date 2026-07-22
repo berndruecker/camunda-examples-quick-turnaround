@@ -10,7 +10,7 @@
       "id": "Field_ReviewHeading"
     },
     {
-      "text": "**Shipment ID:** {{shipmentId}}\n\n**Shipment notes:** {{if shipmentNotes = null or shipmentNotes = \"\" then scenario else shipmentNotes}}\n\n**Gene marker found:** {{if markerRecord = null then \"none\" else markerRecord.geneSymbol + \" (RefSeq \" + markerRecord.refSeqId + \", \" + markerRecord.chrom + \")\"}}\n\n**Destination country:** {{if countryInfo = null then \"unknown\" else countryInfo.name + \" (capital: \" + countryInfo.capital + \", currency: \" + countryInfo.currency + \")\"}}\n\n**Compliance score:** {{complianceScore}}\n\n**Agent's decision:** {{decision}}",
+      "text": "**Shipment notes:** {{if shipmentNotes = null or shipmentNotes = \"\" then scenario else shipmentNotes}}\n\n**Gene marker found:** {{if markerRecord = null then \"none\" else markerRecord.geneSymbol + \" (RefSeq \" + markerRecord.refSeqId + \", \" + markerRecord.chrom + \")\"}}\n\n**Destination country:** {{if countryInfo = null then \"unknown\" else countryInfo.name + \" (capital: \" + countryInfo.capital + \", currency: \" + countryInfo.currency + \")\"}}\n\n**Compliance score:** {{complianceScore}}\n\n**Agent's decision:** {{decision}}",
       "type": "text",
       "layout": {
         "row": "Row_findings",

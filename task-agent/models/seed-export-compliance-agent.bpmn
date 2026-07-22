@@ -18,7 +18,7 @@
           <zeebe:input source="{{secrets.CAMUNDA_PROVIDED_LLM_API_KEY}}" target="provider.openaiCompatible.authentication.apiKey" />
           <zeebe:input source="{{secrets.CAMUNDA_PROVIDED_LLM_DEFAULT_MODEL}}" target="provider.openaiCompatible.model.model" />
           <zeebe:input source="=&#34;You are a demo workflow assistant for fictional compliance checks.&#10;&#10;You must invoke tools using the actual tool-calling mechanism available to you - never describe or simulate a tool call in your plain-text response, and never invent, guess, or fabricate what a tool would return.&#10;&#10;Your job: verify this shipment&#39;s compliance and record your clearance decision. Use whichever tools are actually relevant to what&#39;s in the shipment notes, in whatever order makes sense, each at most once - base every argument on real information, never invented data. A compliance score is CLEARED if even, FLAGGED-FOR-REVIEW if odd. Record your decision only once you&#39;ve reached it, and only once - what happens next is handled automatically.&#34;" target="data.systemPrompt.prompt" />
-          <zeebe:input source="=&#34;Shipment ID: &#34; + shipmentId + &#34;&#10;&#10;Shipment notes:&#10;&#34; + (if shipmentNotes = null or shipmentNotes = &#34;&#34; then (if scenario = null then &#34;&#34; else scenario) else shipmentNotes) + &#34;&#10;&#10;Please verify export compliance for this shipment and notify the team of your decision.&#34;" target="data.userPrompt.prompt" />
+          <zeebe:input source="=&#34;Shipment notes:&#10;&#34; + (if shipmentNotes = null or shipmentNotes = &#34;&#34; then (if scenario = null then &#34;&#34; else scenario) else shipmentNotes) + &#34;&#10;&#10;Please verify export compliance for this shipment and notify the team of your decision.&#34;" target="data.userPrompt.prompt" />
           <zeebe:input target="agentContext" />
           <zeebe:input source="in-process" target="data.memory.storage.type" />
           <zeebe:input source="=20" target="data.memory.contextWindowSize" />
@@ -132,7 +132,7 @@
           <zeebe:input source="=false" target="followRedirects" />
           <zeebe:input source="=20" target="connectionTimeoutInSeconds" />
           <zeebe:input source="=20" target="readTimeoutInSeconds" />
-          <zeebe:input source="={&#10;  shipmentId: shipmentId,&#10;  marker: markerRecord,&#10;  destination: countryInfo,&#10;  complianceScore: complianceScore,&#10;  decision: decision&#10;}" target="body" />
+          <zeebe:input source="={&#10;  marker: markerRecord,&#10;  destination: countryInfo,&#10;  complianceScore: complianceScore,&#10;  decision: decision&#10;}" target="body" />
           <zeebe:input source="=false" target="ignoreNullValues" />
         </zeebe:ioMapping>
         <zeebe:taskHeaders>

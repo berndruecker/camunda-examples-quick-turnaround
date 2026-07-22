@@ -1,6 +1,6 @@
 # Seed Export Compliance Agent
 
-[![Install In Camunda SaaS](https://img.shields.io/badge/Install%20In-Camunda%20SaaS-0A7A5C?style=for-the-badge)](https://modeler.cloud.camunda.io/import/resources?source=https://raw.githubusercontent.com/berndruecker/camunda-examples-quick-turnaround/main/task-agent/models/seed-export-compliance-agent.bpmn,https://raw.githubusercontent.com/berndruecker/camunda-examples-quick-turnaround/main/task-agent/models/seed-export-shipment-ready.form,https://raw.githubusercontent.com/berndruecker/camunda-examples-quick-turnaround/main/task-agent/models/seed-export-compliance-review.form&title=Seed%20Export%20Compliance%20Agent)
+[![Run In Camunda SaaS](https://img.shields.io/badge/Run%20In-Camunda%20SaaS-FC5D0D?style=for-the-badge)](https://modeler.cloud.camunda.io/import/resources?source=https://raw.githubusercontent.com/berndruecker/camunda-examples-quick-turnaround/main/task-agent/models/seed-export-compliance-agent.bpmn,https://raw.githubusercontent.com/berndruecker/camunda-examples-quick-turnaround/main/task-agent/models/seed-export-shipment-ready.form,https://raw.githubusercontent.com/berndruecker/camunda-examples-quick-turnaround/main/task-agent/models/seed-export-compliance-review.form&title=Seed%20Export%20Compliance%20Agent)
 
 
 A concrete runnable **Task Agent** example based on the pattern at [camunda.com/orchestrate/agents](https://camunda.com/orchestrate/agents/).
@@ -22,7 +22,7 @@ The use case would in reality probably don't require agentic reasoning, but we d
 
 The smoothest path is to use a trial cluster in Camunda SaaS. Just use the following button and install the example into your cluster - you can signup on the way if you don't yet have one:
 
-[![Install In Camunda SaaS](https://img.shields.io/badge/Install%20In-Camunda%20SaaS-FC5D0D?style=for-the-badge)](https://modeler.cloud.camunda.io/import/resources?source=https://raw.githubusercontent.com/berndruecker/camunda-examples-quick-turnaround/main/task-agent/models/seed-export-compliance-agent.bpmn,https://raw.githubusercontent.com/berndruecker/camunda-examples-quick-turnaround/main/task-agent/models/seed-export-shipment-ready.form,https://raw.githubusercontent.com/berndruecker/camunda-examples-quick-turnaround/main/task-agent/models/seed-export-compliance-review.form&title=Seed%20Export%20Compliance%20Agent)
+[![Run In Camunda SaaS](https://img.shields.io/badge/Run%20In-Camunda%20SaaS-FC5D0D?style=for-the-badge)](https://modeler.cloud.camunda.io/import/resources?source=https://raw.githubusercontent.com/berndruecker/camunda-examples-quick-turnaround/main/task-agent/models/seed-export-compliance-agent.bpmn,https://raw.githubusercontent.com/berndruecker/camunda-examples-quick-turnaround/main/task-agent/models/seed-export-shipment-ready.form,https://raw.githubusercontent.com/berndruecker/camunda-examples-quick-turnaround/main/task-agent/models/seed-export-compliance-review.form&title=Seed%20Export%20Compliance%20Agent)
 
 Why SaaS first:
 
@@ -32,14 +32,15 @@ Why SaaS first:
 
 
 1. Click [the button above](https://modeler.cloud.camunda.io/import/resources?source=https://raw.githubusercontent.com/berndruecker/camunda-examples-quick-turnaround/main/task-agent/models/seed-export-compliance-agent.bpmn,https://raw.githubusercontent.com/berndruecker/camunda-examples-quick-turnaround/main/task-agent/models/seed-export-shipment-ready.form,https://raw.githubusercontent.com/berndruecker/camunda-examples-quick-turnaround/main/task-agent/models/seed-export-compliance-review.form&title=Seed%20Export%20Compliance%20Agent) to import the example into Camunda SaaS.
+
+   ![Imported model](models/screenshot-imported.png)
 2. Click **Deploy and Run**, the process is deployed onto your cluster and the form to start an instance is opened.
 3. Pick a **Scenario** from the dropdown and leave **Shipment notes** blank to run it as-is. Or fill the **Shipment notes** yourself with data you want to try - whatever you type there takes priority over the dropdown
 
-   (Starting via API/`zbctl` instead of the form works the same way — just supply `shipmentId` and `shipmentNotes` directly, e.g. the "cleared" sample:
+   (Starting via API/`zbctl` instead of the form works the same way — just supply `shipmentNotes` directly, e.g. the "cleared" sample:
    ```json
    {
-      "shipmentId": "SHIP-2026-0731",
-      "shipmentNotes": "Shipment SHIP-2026-0731: seed stock ready for export to Brazil. Lab reference marker on the paperwork is TP53."
+      "shipmentNotes": "SHIP-2026-0731 is prepared for transfer to Brazil. Supporting paperwork includes reference code TP53"
    }
    ```
    )
@@ -77,14 +78,13 @@ The key point: input is free text, not pre-parsed fields. The agent extracts the
 The start form's **Scenario** dropdown carries the sample shipment notes for
 both of these directly — no need to type anything by hand, as long as
 **Shipment notes** is left blank (it always overrides the dropdown when
-filled in). **Shipment ID** is just informational and doesn't affect the
-outcome.
+filled in).
 
 ### Likely cleared
 
 Shipment notes (unstructured):
 
-`Shipment SHIP-2026-0731: seed stock ready for export to Brazil. Lab reference marker on the paperwork is TP53.`
+`SHIP-2026-0731 is prepared for transfer to Brazil. Supporting paperwork includes reference code TP53`
 
 TP53 (4 chars) + Brasília (8 chars) = compliance score 12 (even) → `cleared`.
 
@@ -92,7 +92,7 @@ TP53 (4 chars) + Brasília (8 chars) = compliance score 12 (even) → `cleared`.
 
 Shipment notes (unstructured):
 
-`Shipment SHIP-2026-0900: seed stock ready for export to Germany. Lab reference marker on the paperwork is BRCA1.`
+`SHIP-2026-0900 is prepared for transfer to Germany. Supporting paperwork includes reference code BRCA1`
 
 BRCA1 (5 chars) + Berlin (6 chars) = compliance score 11 (odd) →
 `flagged-for-review`.
@@ -119,7 +119,7 @@ SECRET_CAMUNDA_PROVIDED_LLM_DEFAULT_MODEL=gpt-oss:20b
 ```
 
 3. Start [Camunda 8 Run](https://docs.camunda.io/docs/self-managed/quickstart/developer-quickstart/c8run/).
-4. Deploy [models/seed-export-compliance-agent.bpmn](models/seed-export-compliance-agent.bpmn) and [models/seed-export-shipment-ready.form](models/seed-export-shipment-ready.form).
+4. Deploy [models/seed-export-compliance-agent.bpmn](models/seed-export-compliance-agent.bpmn), [models/seed-export-shipment-ready.form](models/seed-export-shipment-ready.form), and [models/seed-export-compliance-review.form](models/seed-export-compliance-review.form).
 5. Start an instance via Tasklist's form (pick a scenario from the
    dropdown) or with the same sample variables shown above.
 
