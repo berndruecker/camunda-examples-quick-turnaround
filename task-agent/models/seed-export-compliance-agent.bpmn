@@ -158,6 +158,7 @@
     <bpmn:userTask id="HumanTask_ClarifyComplianceIssues" name="Clarify compliance issues">
       <bpmn:extensionElements>
         <zeebe:userTask />
+        <zeebe:formDefinition formId="seed-export-compliance-review" />
       </bpmn:extensionElements>
       <bpmn:incoming>Flow_0tc2859</bpmn:incoming>
       <bpmn:outgoing>Flow_104wevc</bpmn:outgoing>

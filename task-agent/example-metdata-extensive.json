@@ -80,7 +80,7 @@
   },
 
   "deployment": {
-    "resources": ["models/seed-export-compliance-agent.bpmn", "models/seed-export-shipment-ready.form"]
+    "resources": ["models/seed-export-compliance-agent.bpmn", "models/seed-export-shipment-ready.form", "models/seed-export-compliance-review.form"]
   },
 
   "run": {

@@ -1,49 +1,39 @@
 # Seed Export Compliance Agent
 
-A concrete **Task Agent** example based on the pattern at
+A concrete runnable **Task Agent** example based on the pattern at
 [camunda.com/orchestrate/agents](https://camunda.com/orchestrate/agents/).
 
 ![Process Model](models/seed-export-compliance-agent.png)
 
-The process model is in [models/seed-export-compliance-agent.bpmn](models/seed-export-compliance-agent.bpmn), with a start form in [models/seed-export-shipment-ready.form](models/seed-export-shipment-ready.form).
+It contains:
 
-## Why this example
-
-If you already know the Task Agent pattern, this repo gives you a runnable
-end-to-end instance with:
-
-- one agent task with real tool calls
-- unstructured input (agent must extract marker and country)
-- deterministic routing after agent output
-- human handoff for flagged cases
-- visible orchestration and outcomes in Operate
+- one agent subprocess with real tool calls
+- unstructured text input (agent must extract marker and country)
+- deterministic routing after agent finishes with human handoff for flagged cases
+- visible orchestration and outcomes via Camunda tooling
 
 It is intentionally compact so you can import, run, and inspect quickly.
 
+The use case would in reality probably don't require agentic reasoning, but we dumbed the example down to make it simple, so bare with us here.
+
 ## Try it in 5 minutes (Camunda 8 SaaS - recommended)
 
-This is the smoothest path and the one to start with.
+The smoothest path is to use a trial cluster in Camunda SaaS. Just use the following button and install the example into your cluster - you can signup on the way if you don't yet have one:
 
-[![Install In Camunda SaaS](https://img.shields.io/badge/Install%20In-Camunda%20Modeler-0A7A5C?style=for-the-badge)](https://modeler.cloud.camunda.io/import/resources?source=https://raw.githubusercontent.com/berndruecker/camunda-examples-quick-turnaround/main/task-agent/models/seed-export-compliance-agent.bpmn,https://raw.githubusercontent.com/berndruecker/camunda-examples-quick-turnaround/main/task-agent/models/seed-export-shipment-ready.form&title=Seed%20Export%20Compliance%20Agent)
+[![Install In Camunda SaaS](https://img.shields.io/badge/Install%20In-Camunda%20Modeler-0A7A5C?style=for-the-badge)](https://modeler.cloud.camunda.io/import/resources?source=https://raw.githubusercontent.com/berndruecker/camunda-examples-quick-turnaround/main/task-agent/models/seed-export-compliance-agent.bpmn,https://raw.githubusercontent.com/berndruecker/camunda-examples-quick-turnaround/main/task-agent/models/seed-export-shipment-ready.form,https://raw.githubusercontent.com/berndruecker/camunda-examples-quick-turnaround/main/task-agent/models/seed-export-compliance-review.form&title=Seed%20Export%20Compliance%20Agent)
 
 Why SaaS first:
 
-- Preconfigured to use the [Camunda-provided LLM](https://docs.camunda.io/docs/components/agentic-orchestration/camunda-provided-llm/)
-- No access tokens, no secrets, no external API keys
+- Preconfigured to use the [Camunda-provided LLM](https://docs.camunda.io/docs/components/agentic-orchestration/camunda-provided-llm/), so no access tokens, secrets, or external API keys needed
 - No local installation required
 
-1. Click the button above to import the BPMN and form into Web Modeler.
-2. Use Deploy and Run.
-3. Start an instance via the form. Pick a **Scenario** from the dropdown and
-   leave **Shipment notes** blank to run it as-is:
-   - **Likely cleared** (TP53 marker, Brazil)
-   - **Likely flagged for review** (BRCA1 marker, Germany)
-   - **Custom** — fill in **Shipment notes** yourself; whatever you type
-     there always takes priority over the dropdown
 
-   (Starting via API/`zbctl` instead of the form works the same way — just
-   supply `shipmentId` and `shipmentNotes` directly, e.g. the "cleared"
-   sample:
+
+1. Click [the button above](https://modeler.cloud.camunda.io/import/resources?source=https://raw.githubusercontent.com/berndruecker/camunda-examples-quick-turnaround/main/task-agent/models/seed-export-compliance-agent.bpmn,https://raw.githubusercontent.com/berndruecker/camunda-examples-quick-turnaround/main/task-agent/models/seed-export-shipment-ready.form,https://raw.githubusercontent.com/berndruecker/camunda-examples-quick-turnaround/main/task-agent/models/seed-export-compliance-review.form&title=Seed%20Export%20Compliance%20Agent) to import the example into Camunda SaaS.
+2. Click **Deploy and Run**, the process is deployed onto your cluster and the form to start an instance is opened.
+3. Pick a **Scenario** from the dropdown and leave **Shipment notes** blank to run it as-is. Or fill the **Shipment notes** yourself with data you want to try - whatever you type there takes priority over the dropdown
+
+   (Starting via API/`zbctl` instead of the form works the same way — just supply `shipmentId` and `shipmentNotes` directly, e.g. the "cleared" sample:
    ```json
    {
       "shipmentId": "SHIP-2026-0731",
@@ -51,20 +41,26 @@ Why SaaS first:
    }
    ```
    )
-4. Watch the flow in Operate: the agent produces a decision, an exclusive
-   gateway routes deterministically, and only the "all clear" path sends the
-   notification automatically.
 
-## What you will see
+   ![Start form](models/screenshot-start-form.png)
+4. Watch the flow in Operate: the agent produces a decision, an exclusive gateway routes deterministically, and only the "all clear" path sends the notification automatically.
 
-Inside the agent scope, the model invokes three tools backed by real public
-services.
+   ![Operate](models/screenshot-operate.png)
+5. You can see the human handoff in Tasklist and complete the task yourself to finish the process
+
+   ![Review task form](models/screenshot-review-form.png)
+
+## What happens technically
+
+Inside the agent scope, the model invokes three tools backed by real public services.
 
 | # | Capability | Protocol | Public service used | Tool / BPMN element |
 |---|---|---|---|---|
 | 1 | Query data | SQL | UCSC public MySQL server (`hg38`) | `VerifyGeneticMarker` |
 | 2 | Call API | GraphQL | [Countries GraphQL API](https://countries.trevorblades.com/) | `CheckDestinationCountry` |
 | 3 | Compute/update | REST | [api.mathjs.org](https://api.mathjs.org) | `ComputeComplianceScore` |
+
+All those tools are governed by Camunda, which means every call is a first-class, versioned BPMN element: retried automatically on failure, fully visible and audited in Operate, and constrained to exactly the tools modeled in the ad-hoc sub-process — the agent can only ever call what's actually there, never something it invents.
 
 After the agent completes, process flow is deterministic:
 

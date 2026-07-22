@@ -4,7 +4,8 @@
   "url": "https://github.com/berndruecker/camunda-examples-quick-turnaround/task-agent",
   "resources": [
     "models/seed-export-compliance-agent.bpmn",
-    "models/seed-export-shipment-ready.form"
+    "models/seed-export-shipment-ready.form",
+    "models/seed-export-compliance-review.form"
   ],
   "sampleVariables": {
     "shipmentId": "SHIP-2026-0731",
