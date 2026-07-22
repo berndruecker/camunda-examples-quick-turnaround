@@ -1,3 +1,5 @@
+## MOVED TO https://github.com/camunda/camunda-8-tutorials/tree/main/examples/task-agent
+
 # Seed Export Compliance Agent
 
 [![Run In Camunda SaaS](https://img.shields.io/badge/Run%20In-Camunda%20SaaS-FC5D0D?style=for-the-badge)](https://modeler.cloud.camunda.io/import/resources?source=https://raw.githubusercontent.com/berndruecker/camunda-examples-quick-turnaround/main/task-agent/models/seed-export-compliance-agent.bpmn,https://raw.githubusercontent.com/berndruecker/camunda-examples-quick-turnaround/main/task-agent/models/seed-export-shipment-ready.form,https://raw.githubusercontent.com/berndruecker/camunda-examples-quick-turnaround/main/task-agent/models/seed-export-compliance-review.form&title=Seed%20Export%20Compliance%20Agent)
