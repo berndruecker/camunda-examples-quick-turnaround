@@ -1,7 +1,9 @@
 # Seed Export Compliance Agent
 
-A concrete runnable **Task Agent** example based on the pattern at
-[camunda.com/orchestrate/agents](https://camunda.com/orchestrate/agents/).
+[![Install In Camunda SaaS](https://img.shields.io/badge/Install%20In-Camunda%20SaaS-0A7A5C?style=for-the-badge)](https://modeler.cloud.camunda.io/import/resources?source=https://raw.githubusercontent.com/berndruecker/camunda-examples-quick-turnaround/main/task-agent/models/seed-export-compliance-agent.bpmn,https://raw.githubusercontent.com/berndruecker/camunda-examples-quick-turnaround/main/task-agent/models/seed-export-shipment-ready.form,https://raw.githubusercontent.com/berndruecker/camunda-examples-quick-turnaround/main/task-agent/models/seed-export-compliance-review.form&title=Seed%20Export%20Compliance%20Agent)
+
+
+A concrete runnable **Task Agent** example based on the pattern at [camunda.com/orchestrate/agents](https://camunda.com/orchestrate/agents/).
 
 ![Process Model](models/seed-export-compliance-agent.png)
 
@@ -20,7 +22,7 @@ The use case would in reality probably don't require agentic reasoning, but we d
 
 The smoothest path is to use a trial cluster in Camunda SaaS. Just use the following button and install the example into your cluster - you can signup on the way if you don't yet have one:
 
-[![Install In Camunda SaaS](https://img.shields.io/badge/Install%20In-Camunda%20Modeler-0A7A5C?style=for-the-badge)](https://modeler.cloud.camunda.io/import/resources?source=https://raw.githubusercontent.com/berndruecker/camunda-examples-quick-turnaround/main/task-agent/models/seed-export-compliance-agent.bpmn,https://raw.githubusercontent.com/berndruecker/camunda-examples-quick-turnaround/main/task-agent/models/seed-export-shipment-ready.form,https://raw.githubusercontent.com/berndruecker/camunda-examples-quick-turnaround/main/task-agent/models/seed-export-compliance-review.form&title=Seed%20Export%20Compliance%20Agent)
+[![Install In Camunda SaaS](https://img.shields.io/badge/Install%20In-Camunda%20SaaS-FC5D0D?style=for-the-badge)](https://modeler.cloud.camunda.io/import/resources?source=https://raw.githubusercontent.com/berndruecker/camunda-examples-quick-turnaround/main/task-agent/models/seed-export-compliance-agent.bpmn,https://raw.githubusercontent.com/berndruecker/camunda-examples-quick-turnaround/main/task-agent/models/seed-export-shipment-ready.form,https://raw.githubusercontent.com/berndruecker/camunda-examples-quick-turnaround/main/task-agent/models/seed-export-compliance-review.form&title=Seed%20Export%20Compliance%20Agent)
 
 Why SaaS first:
 

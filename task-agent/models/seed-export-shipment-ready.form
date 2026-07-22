@@ -14,11 +14,11 @@
       "values": [
         {
           "label": "Likely cleared (TP53 marker, Brazil)",
-          "value": "Shipment SHIP-2026-0731: seed stock ready for export to Brazil. Lab reference marker on the paperwork is TP53."
+          "value": "SHIP-2026-0731 is prepared for transfer to Brazil. Supporting paperwork includes reference code TP53"
         },
         {
           "label": "Likely flagged for review (BRCA1 marker, Germany)",
-          "value": "Shipment SHIP-2026-0900: seed stock ready for export to Germany. Lab reference marker on the paperwork is BRCA1."
+          "value": "SHIP-2026-0900 is prepared for transfer to Germany. Supporting paperwork includes reference code BRCA"
         },
         {
           "label": "Custom (write your own below)",
@@ -33,10 +33,10 @@
       },
       "id": "Field_Scenario",
       "key": "scenario",
-      "defaultValue": "Shipment SHIP-2026-0731: seed stock ready for export to Brazil. Lab reference marker on the paperwork is TP53."
+      "defaultValue": "SHIP-2026-0731 is prepared for transfer to Brazil. Supporting paperwork includes reference code TP53"
     },
     {
-      "text": "The following shipments notes are used:\n* Likely cleared: Shipment SHIP-2026-0731: seed stock ready for export to Brazil. Lab reference marker on the paperwork is TP53.\n* Likely flagged: Shipment SHIP-2026-0900: seed stock ready for export to Germany. Lab reference marker on the paperwork is BRCA1.",
+      "text": "The following shipments notes are used:\n* Likely cleared: SHIP-2026-0731 is prepared for transfer to Brazil. Supporting paperwork includes reference code TP53.\n* Likely flagged: SHIP-2026-0900 is prepared for transfer to Germany. Supporting paperwork includes reference code BRCA1.",
       "type": "text",
       "layout": {
         "row": "Row_1h31mub",
