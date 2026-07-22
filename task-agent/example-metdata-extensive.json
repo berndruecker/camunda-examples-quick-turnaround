@@ -80,7 +80,7 @@
   },
 
   "deployment": {
-    "resources": ["models/seed-export-compliance-agent.bpmn"]
+    "resources": ["models/seed-export-compliance-agent.bpmn", "models/seed-export-shipment-ready.form"]
   },
 
   "run": {
@@ -94,7 +94,7 @@
       "shipmentId": "SHIP-2026-0731",
       "shipmentNotes": "Shipment SHIP-2026-0731: seed stock ready for export to Brazil. Lab reference marker on the paperwork is TP53."
     },
-    "expectedOutcome": "The agent calls verify_genetic_marker, check_destination_country, compute_compliance_score, and notify_export_team in order, then the process completes at 'Compliance decision sent' with a cleared/flagged-for-review decision visible in Operate."
+    "expectedOutcome": "The agent calls verify_genetic_marker, check_destination_country, and compute_compliance_score as needed, then records its clearance decision. A deterministic gateway then either calls notify_export_team automatically (cleared) or routes to a human 'Clarify compliance issues' task (flagged-for-review), visible end-to-end in Operate."
   },
 
   "links": {

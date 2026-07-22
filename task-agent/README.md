@@ -1,129 +1,149 @@
 # Seed Export Compliance Agent
 
-A small, self-contained Camunda 8 example illustrating the **Task agent** pattern
-from [camunda.com/orchestrate/agents](https://camunda.com/orchestrate/agents/):
-
-> Acts on systems. Queries databases, calls APIs, updates records, sends
-> communications. The LLM reasons about which tool to invoke and when.
+A concrete **Task Agent** example based on the pattern at
+[camunda.com/orchestrate/agents](https://camunda.com/orchestrate/agents/).
 
 ![Process Model](models/seed-export-compliance-agent.png)
 
-The process model lives at [models/seed-export-compliance-agent.bpmn](models/seed-export-compliance-agent.bpmn),
-with a start form at [models/seed-export-shipment-ready.form](models/seed-export-shipment-ready.form).
+The process model is in [models/seed-export-compliance-agent.bpmn](models/seed-export-compliance-agent.bpmn), with a start form in [models/seed-export-shipment-ready.form](models/seed-export-shipment-ready.form).
 
-## What this demonstrates
+## Why this example
 
-An AI Agentis given four tools, each hitting a **real, live, public, keyless** service. This showcases how those tools are governed by Camunda.
+If you already know the Task Agent pattern, this repo gives you a runnable
+end-to-end instance with:
 
-| # | What it does | Protocol | Public service used | Tool / BPMN element |
-|---|---|---|---|---|
-| 1 | Queries databases | SQL | UCSC public MySQL server (`hg38`) | `VerifyGeneticMarker` |
-| 2 | Calls APIs | GraphQL | [Countries GraphQL API](https://countries.trevorblades.com/) | `CheckDestinationCountry` |
-| 3 | Updates records | REST | [api.mathjs.org](https://api.mathjs.org) expression evaluator | `ComputeComplianceScore` |
-| 4 | Sends communications | REST | [httpbin.io](https://httpbin.io) echo endpoint | `NotifyExportTeam` |
+- one agent task with real tool calls
+- unstructured input (agent must extract marker and country)
+- deterministic routing after agent output
+- human handoff for flagged cases
+- visible orchestration and outcomes in Operate
 
-## Demo scenario
+It is intentionally compact so you can import, run, and inspect quickly.
 
-A shipment of seed stock is ready for export. Before it clears, an agent reads the shipment's free-text notes, works out the genetic marker and destination country referenced in them,
-checks the destination country's basic profile (used to pick the right paperwork/ruleset), runs the marker and country through a legacy scoring engine, and notifies the export team with a clearance decision.
+## Try it in 5 minutes (Camunda 8 SaaS - recommended)
 
-*(intentionally stretched to keep it simple)*
-
-Here is sample input data:
-
-* Shipment id: `SHIP-2026-0731`
-* Shipment notes: `Shipment SHIP-2026-0731: seed stock ready for export to Brazil. Lab reference marker on the paperwork is TP53.`
-
-The input is deliberately unstructured — the agent has to extract the gene marker symbol and convert the destination country to an ISO code itself, rather than receive them pre-parsed. That's the actual point of using an agent here: a fixed BPMN sequence of connector calls can't casually do that extraction and conversion step; an LLM can. The system prompt describes the goal and constraints, not a numbered call sequence — the agent decides which tools to call and when.
-
-### Disclaimer
-
-> NOTE: This demo uses public reference-genome and calculator services as
-> stand-ins for a seed-genetics database and a compliance scoring engine.
-> No real regulatory, health, or personal data is involved. Swap the SQL
-> endpoint and the two REST endpoints for real systems in any non-demo use.
-
-Nothing in this repo — the BPMN element names, the notification payload, or
-this README — should be read as real regulatory guidance. It is illustrative
-only.
-
-## Deployment
-
-### Option A — Camunda 8 SaaS (recommended)
+This is the smoothest path and the one to start with.
 
 [![Install In Camunda SaaS](https://img.shields.io/badge/Install%20In-Camunda%20Modeler-0A7A5C?style=for-the-badge)](https://modeler.cloud.camunda.io/import/resources?source=https://raw.githubusercontent.com/berndruecker/camunda-examples-quick-turnaround/main/task-agent/models/seed-export-compliance-agent.bpmn,https://raw.githubusercontent.com/berndruecker/camunda-examples-quick-turnaround/main/task-agent/models/seed-export-shipment-ready.form&title=Seed%20Export%20Compliance%20Agent)
 
-This example is pre-configured to use the **Camunda-provided LLM** — a fully managed model that works out of the box. The required secrets (`CAMUNDA_PROVIDED_LLM_API_ENDPOINT` and
-`CAMUNDA_PROVIDED_LLM_API_KEY`) are automatically available on Camunda SaaS — no external API keys, no third-party accounts, no configuration required.
+Why SaaS first:
 
-👉 Learn about the Camunda-provided LLM: https://docs.camunda.io/docs/components/agentic-orchestration/camunda-provided-llm/
+- Preconfigured to use the [Camunda-provided LLM](https://docs.camunda.io/docs/components/agentic-orchestration/camunda-provided-llm/)
+- No access tokens, no secrets, no external API keys
+- No local installation required
 
-1. Import `models/seed-export-compliance-agent.bpmn` and
-   `models/seed-export-shipment-ready.form` to your SaaS Modeler
-2. Deploy to your cluster (Using the "Deploy and Run" button) and provide some variables ot properly start an instance:
+1. Click the button above to import the BPMN and form into Web Modeler.
+2. Use Deploy and Run.
+3. Start an instance via the form. Pick a **Scenario** from the dropdown and
+   leave **Shipment notes** blank to run it as-is:
+   - **Likely cleared** (TP53 marker, Brazil)
+   - **Likely flagged for review** (BRCA1 marker, Germany)
+   - **Custom** — fill in **Shipment notes** yourself; whatever you type
+     there always takes priority over the dropdown
 
-
-```json
-{
-  "shipmentId": "SHIP-2026-0731",
-  "shipmentNotes": "Shipment SHIP-2026-0731: seed stock ready for export to Brazil. Lab reference marker on the paperwork is TP53."
-}
-```
-3. All four tools work out of the box — none of them need configuration.
-
-### Option B — Camunda 8 Run (local, Docker-based, self-managed)
-
-1. [Install a local LLM](https://docs.camunda.io/docs/next/guides/getting-started-agentic-orchestration/#set-up-ollama) (or get credentials for a hosted one)
-2. Set up environment variables for the LLM (e.g. for local Ollama with gpt-oss:20b), for example in a .env file:
+   (Starting via API/`zbctl` instead of the form works the same way — just
+   supply `shipmentId` and `shipmentNotes` directly, e.g. the "cleared"
+   sample:
+   ```json
+   {
+      "shipmentId": "SHIP-2026-0731",
+      "shipmentNotes": "Shipment SHIP-2026-0731: seed stock ready for export to Brazil. Lab reference marker on the paperwork is TP53."
+   }
    ```
+   )
+4. Watch the flow in Operate: the agent produces a decision, an exclusive
+   gateway routes deterministically, and only the "all clear" path sends the
+   notification automatically.
+
+## What you will see
+
+Inside the agent scope, the model invokes three tools backed by real public
+services.
+
+| # | Capability | Protocol | Public service used | Tool / BPMN element |
+|---|---|---|---|---|
+| 1 | Query data | SQL | UCSC public MySQL server (`hg38`) | `VerifyGeneticMarker` |
+| 2 | Call API | GraphQL | [Countries GraphQL API](https://countries.trevorblades.com/) | `CheckDestinationCountry` |
+| 3 | Compute/update | REST | [api.mathjs.org](https://api.mathjs.org) | `ComputeComplianceScore` |
+
+After the agent completes, process flow is deterministic:
+
+- `All clear?` gateway evaluates the decision
+- `yes` path calls `NotifyExportTeam` (REST to [httpbin.io](https://httpbin.io))
+- `no` path creates the user task `Clarify compliance issues`
+
+The key point: input is free text, not pre-parsed fields. The agent extracts the marker and country and decides tool usage dynamically; the BPMN handles deterministic branching and human escalation.
+
+## Demo scenarios
+
+The start form's **Scenario** dropdown carries the sample shipment notes for
+both of these directly — no need to type anything by hand, as long as
+**Shipment notes** is left blank (it always overrides the dropdown when
+filled in). **Shipment ID** is just informational and doesn't affect the
+outcome.
+
+### Likely cleared
+
+Shipment notes (unstructured):
+
+`Shipment SHIP-2026-0731: seed stock ready for export to Brazil. Lab reference marker on the paperwork is TP53.`
+
+TP53 (4 chars) + Brasília (8 chars) = compliance score 12 (even) → `cleared`.
+
+### Likely flagged for review
+
+Shipment notes (unstructured):
+
+`Shipment SHIP-2026-0900: seed stock ready for export to Germany. Lab reference marker on the paperwork is BRCA1.`
+
+BRCA1 (5 chars) + Berlin (6 chars) = compliance score 11 (odd) →
+`flagged-for-review`.
+
+### Both scenarios, the agent:
+
+1. Extracts marker and destination country from text
+2. Converts country to ISO code
+3. Calls verification and scoring tools
+4. Returns a decision used by the deterministic `All clear?` gateway
+5. Either notifies automatically (`yes`) or routes to human clarification (`no`)
+
+## Local/self-managed path (advanced)
+
+Use this only if you need local Docker-based setup with your own LLM.
+
+1. [Install a local LLM](https://docs.camunda.io/docs/next/guides/getting-started-agentic-orchestration/#set-up-ollama) (or use hosted credentials).
+2. Configure environment variables (example for local Ollama):
+
+```env
 SECRET_CAMUNDA_PROVIDED_LLM_API_ENDPOINT=http://localhost:11434/v1
 SECRET_CAMUNDA_PROVIDED_LLM_API_KEY=null
 SECRET_CAMUNDA_PROVIDED_LLM_DEFAULT_MODEL=gpt-oss:20b
-   ```
-   Camunda secrets read `secrets.<NAME>` from environment variables of the same name.
+```
+
 3. Start [Camunda 8 Run](https://docs.camunda.io/docs/self-managed/quickstart/developer-quickstart/c8run/).
-4. Deploy `models/seed-export-compliance-agent.bpmn` and
-   `models/seed-export-shipment-ready.form`.
-5. Start an instance using some sample process variable:
-```json
-{
-  "shipmentId": "SHIP-2026-0731",
-  "shipmentNotes": "Shipment SHIP-2026-0731: seed stock ready for export to Brazil. Lab reference marker on the paperwork is TP53."
-}
-```
+4. Deploy [models/seed-export-compliance-agent.bpmn](models/seed-export-compliance-agent.bpmn) and [models/seed-export-shipment-ready.form](models/seed-export-shipment-ready.form).
+5. Start an instance via Tasklist's form (pick a scenario from the
+   dropdown) or with the same sample variables shown above.
 
-## Starting an instance
+Camunda secrets read `secrets.<NAME>` from same-named environment variables.
 
-The start event carries a **Camunda Form**, pre-filled with sample data —
-the easiest way to start is Tasklist's or Web Modeler's "Start instance"
-flow, which will render it directly. It asks for two fields:
+## Optional: see live notifications
 
-```json
-{
-  "shipmentId": "SHIP-2026-0731",
-  "shipmentNotes": "Shipment SHIP-2026-0731: seed stock ready for export to Brazil. Lab reference marker on the paperwork is TP53."
-}
-```
+By default, `NotifyExportTeam` posts to `https://httpbin.io/post` (echo response
+only). This runs on the `yes` branch after the `All clear?` gateway.
 
-`shipmentNotes` is free text — write it like real shipment paperwork or an
-email, not a structured record. The agent reads it to find the gene marker
-symbol and the destination country (converting the country to its
-ISO-3166 alpha-2 code itself). You can still start an instance by supplying
-these two variables directly (Operate "Start instance", `zbctl`, or the
-REST API) instead of using the form — both paths work.
+For a live demo:
 
-Watch the agent work out what it needs from the notes, call the tools it
-decides it needs, and reach a `cleared`/`flagged-for-review` decision,
-visible end-to-end in Operate.
+1. Create a unique URL at [webhook.site](https://webhook.site/).
+2. Replace the `url` input in the `NotifyExportTeam` task.
+3. Start a new instance and observe incoming requests in webhook.site.
 
-## Want to see the notification land live?
+## Notes and disclaimer
 
-By default, the `NotifyExportTeam` tool posts to `https://httpbin.io/post`, which just echoes the request back in its own JSON response — visible in Operate's variable view, but not in a live feed anywhere else.
+This is an illustrative demo only.
 
-For a live demo or something real to happen, generate a fresh, session-specific URL at
-[webhook.site](https://webhook.site/), open it in a browser tab, and replace the `url` input on the `NotifyExportTeam` service task with that URL. Because the URL is unique per session, it's intentionally **not** hardcoded into the BPMN file — generate your own before a live demo.
+- Public services are stand-ins for real enterprise systems.
+- No real regulatory, health, or personal data is used.
+- Nothing here should be interpreted as regulatory guidance.
 
-## Etiquette note
-
-The UCSC MySQL server (`genome-mysql.soe.ucsc.edu`) is shared public infrastructure used by many researchers. This process only ever issues a single, indexed `LIMIT 1` lookup per instance — please don't wrap it in a retry loop or use it for load testing. The same restraint applies to the
-GraphQL and REST endpoints: each is called at most once per process instance (each tool task has a small, bounded job retry count of 2 — 3 attempts total, 5 seconds apart — to ride out one-off network blips on these shared third-party services, not to hammer them).
+Please be respectful of shared public services. This example is intentionally low-volume and not intended for load testing.

@@ -1,6 +1,59 @@
 {
   "components": [
     {
+      "text": "# Use a predefined scenario...",
+      "type": "text",
+      "layout": {
+        "row": "Row_04pl1rt",
+        "columns": null
+      },
+      "id": "Field_0a6kzzq"
+    },
+    {
+      "label": "Scenario",
+      "values": [
+        {
+          "label": "Likely cleared (TP53 marker, Brazil)",
+          "value": "Shipment SHIP-2026-0731: seed stock ready for export to Brazil. Lab reference marker on the paperwork is TP53."
+        },
+        {
+          "label": "Likely flagged for review (BRCA1 marker, Germany)",
+          "value": "Shipment SHIP-2026-0900: seed stock ready for export to Germany. Lab reference marker on the paperwork is BRCA1."
+        },
+        {
+          "label": "Custom (write your own below)",
+          "value": ""
+        }
+      ],
+      "description": "Use pre-defined sceanrio - to use leave Shipment notes below blank.",
+      "type": "select",
+      "layout": {
+        "row": "Row_scenario",
+        "columns": null
+      },
+      "id": "Field_Scenario",
+      "key": "scenario",
+      "defaultValue": "Shipment SHIP-2026-0731: seed stock ready for export to Brazil. Lab reference marker on the paperwork is TP53."
+    },
+    {
+      "text": "The following shipments notes are used:\n* Likely cleared: Shipment SHIP-2026-0731: seed stock ready for export to Brazil. Lab reference marker on the paperwork is TP53.\n* Likely flagged: Shipment SHIP-2026-0900: seed stock ready for export to Germany. Lab reference marker on the paperwork is BRCA1.",
+      "type": "text",
+      "layout": {
+        "row": "Row_1h31mub",
+        "columns": null
+      },
+      "id": "Field_0j1vwd9"
+    },
+    {
+      "text": "# ...or hand in your own data",
+      "type": "text",
+      "layout": {
+        "row": "Row_1wu4opr",
+        "columns": null
+      },
+      "id": "Field_12u5gzd"
+    },
+    {
       "label": "Shipment ID",
       "type": "textfield",
       "layout": {
@@ -16,7 +69,7 @@
     },
     {
       "label": "Shipment notes",
-      "description": "Paperwork, an email, or notes about the shipment, in plain free text. The agent reads this to work out the gene marker and destination country itself.",
+      "description": "If set, overrides the scenario above. Leave blank to use the scenario selected above. The agent reads this to check for clearance.",
       "type": "textarea",
       "layout": {
         "row": "Row_shipment_notes",
@@ -24,10 +77,7 @@
       },
       "id": "Field_ShipmentNotes",
       "key": "shipmentNotes",
-      "defaultValue": "Shipment SHIP-2026-0731: seed stock ready for export to Brazil. Lab reference marker on the paperwork is TP53.",
-      "validate": {
-        "required": true
-      }
+      "defaultValue": ""
     }
   ],
   "type": "default",
@@ -38,5 +88,5 @@
     "name": "Camunda Modeler",
     "version": "5.46.1"
   },
-  "schemaVersion": 18
+  "schemaVersion": 19
 }
